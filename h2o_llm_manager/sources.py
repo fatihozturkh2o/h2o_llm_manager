@@ -1,23 +1,21 @@
 import json
 from enum import Enum
-from typing import Any, List, Optional, Union
-import os
+from typing import Any, List, Optional
+
 import openai
 import requests
 from gradio_client import Client
 from requests import Response
-from utils import split_sentences, value_or_default, is_dict_string, string_to_dict, LLMGenerateError
-
-# ENV variables
-llm_h2ogpt_gradio_url = os.environ.get("H2OGPT_GRADIO_URL", None)
-llm_mlops_url = os.environ.get("MLOPS_LLM_URL", None)
-llm_openai_api_key = os.environ.get("OPENAI_API_KEY", None)
+from utils import LLMGenerateError, is_dict_string, split_sentences, string_to_dict
 
 # logs
 enable_logs: bool = False
+
+
 def print_log(message: str):
     if enable_logs:
         print(message)
+
 
 class LLMSourceType(str, Enum):
     H2OGPT: str = "h2oGPT"
@@ -81,13 +79,10 @@ class H2OGPTLLMSource(BaseLLMSource):
     ):
         self.type: LLMSourceType = LLMSourceType.H2OGPT
         self.name: Optional[str] = name
-        self.url: str = url
+        self.url: Optional[str] = url
         self.prompt_type: Optional[str] = prompt_type
         self.chat: bool = chat
         self.api_name: str = api_name
-
-        # Config override
-        self.url = value_or_default(self.url, llm_h2ogpt_gradio_url)
 
     def get_client(self) -> Client:
         return Client(self.url)
@@ -187,9 +182,7 @@ class MLOpsLLMSource(BaseLLMSource):
     ):
         self.type: LLMSourceType = LLMSourceType.MLOPS
         self.name: Optional[str] = name
-        self.url: str = url
-        # Config override
-        self.url = value_or_default(self.url, llm_mlops_url)
+        self.url: Optional[str] = url
 
     @property
     def failed_connection_message(self) -> str:
@@ -254,8 +247,6 @@ class OpenAILLMSource(BaseLLMSource):
         self.type: LLMSourceType = LLMSourceType.OPENAI
         self.name: Optional[str] = name
         self.api_key: Optional[str] = api_key
-        # Config override
-        self.api_key = value_or_default(self.api_key, llm_openai_api_key)
 
     @property
     def failed_connection_message(self) -> str:

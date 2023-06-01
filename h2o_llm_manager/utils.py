@@ -1,8 +1,8 @@
-import nltk
 import ast
-
-from typing import Any, Callable, Dict, List, Optional, Union
 from dataclasses import dataclass
+from typing import Any, List, Optional
+
+import nltk
 
 
 @dataclass
@@ -14,11 +14,13 @@ class LLMGenerateError(Exception):
 def value_or_default(value: Optional[Any], default: Any) -> Any:
     return value if value is not None else default
 
+
 def split_sentences(text: str) -> List[str]:
     # Use nltk to split the text into sentences
     nltk.download("punkt", quiet=True)
     sentences = nltk.sent_tokenize(text)
     return sentences
+
 
 def is_dict_string(string: str) -> bool:
     """

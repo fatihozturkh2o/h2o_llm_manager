@@ -1,5 +1,6 @@
-from typing import Any, List, Optional, Union
-from sources import BaseLLMSource, H2OGPTLLMSource, MLOpsLLMSource, OpenAILLMSource
+from typing import List, Optional, Union
+
+from sources import BaseLLMSource
 
 ############################
 #         LLMManager       #
@@ -9,14 +10,12 @@ from sources import BaseLLMSource, H2OGPTLLMSource, MLOpsLLMSource, OpenAILLMSou
 class LLMManager(object):
     def __init__(
         self,
-        active_source: BaseLLMSource = H2OGPTLLMSource(),
+        sources: Optional[List[BaseLLMSource]] = None,
     ) -> None:
-        self.sources: List[BaseLLMSource] = [
-            H2OGPTLLMSource(),
-            MLOpsLLMSource(),
-            OpenAILLMSource(),
-        ]
-        self.active_source: BaseLLMSource = active_source
+        self.sources: Optional[List[BaseLLMSource]] = sources
+        self.active_source: Optional[BaseLLMSource] = None
+        if self.sources is None:
+            self.sources = []
 
     def get_source(
         self, source_name: Optional[str] = None, source_type: Optional[str] = None
@@ -37,8 +36,11 @@ class LLMManager(object):
     def generate(
         self,
         prompt: str,
-        bullet_text: bool = True,
+        bullet_text: bool = False,
     ) -> Optional[str]:
+
+        if self.active_source is None:
+            raise ValueError("Active source needs to be set before generating any response")
 
         print(f"Generating response with the LLM source: {self.active_source.name}...")
         return self.active_source.generate(prompt=prompt, bullet_text=bullet_text)
