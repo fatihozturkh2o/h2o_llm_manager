@@ -18,6 +18,22 @@ class LLMManager(object):
         if self.sources is None:
             self.sources = []
 
+    def add_source(self, source: BaseLLMSource):
+        if self.get_source(source_name=source.name):
+            """Already exists"""
+            return
+
+        self.sources.append(source)
+
+    def remove_source(self, source: Union[BaseLLMSource, str]):
+        if not self.get_source(source_name=source.name):
+            raise ValueError(f"LLM Source {source.name} doesn't exist")
+
+        if isinstance(source, BaseLLMSource):
+            self.sources.remove(source)
+        else:  # str
+            self.sources.remove(self.get_source(source_name=source))
+
     def get_source(
         self, source_name: Optional[str] = None, source_type: Optional[str] = None
     ) -> Optional[BaseLLMSource]:

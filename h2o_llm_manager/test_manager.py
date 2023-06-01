@@ -30,7 +30,8 @@ def get_llm_sources() -> List[BaseLLMSource]:
     return llm_sources
 
 
-if __name__ == "__main__":
+def test_sources():
+    print("\ntest_sources...")
     prompt = "Why 42?"
     llm_sources = get_llm_sources()
     llm_manager = LLMManager(sources=llm_sources)
@@ -44,3 +45,35 @@ if __name__ == "__main__":
     response = llm_manager.generate(prompt)
     print(f"Prompt: {prompt}")
     print(f"{llm_manager.active_source.name} response: {response}")
+
+
+def test_add_source():
+    print("\ntest_add_source...")
+    h2ogpt_llm = H2OGPTLLMSource()
+    llm_manager = LLMManager()
+    print("Before - Available LLM sources...")
+    for i, source in enumerate(llm_manager.sources):
+        print(f"LLM Source {i}: {source.name}")
+    llm_manager.add_source(h2ogpt_llm)
+    print("After - Available LLM sources...")
+    for i, source in enumerate(llm_manager.sources):
+        print(f"LLM Source {i}: {source.name}")
+
+
+def test_remove_source():
+    print("\ntest_remove_source...")
+    h2ogpt_llm = H2OGPTLLMSource()
+    llm_manager = LLMManager(sources=[h2ogpt_llm])
+    print("Before - Available LLM sources...")
+    for i, source in enumerate(llm_manager.sources):
+        print(f"LLM Source {i}: {source.name}")
+    llm_manager.remove_source(h2ogpt_llm)
+    print("After - Available LLM sources...")
+    for i, source in enumerate(llm_manager.sources):
+        print(f"LLM Source {i}: {source.name}")
+
+
+if __name__ == "__main__":
+    test_add_source()
+    test_remove_source()
+    test_sources()
