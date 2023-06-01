@@ -1,5 +1,6 @@
 from typing import List, Optional, Union
 
+from log import print_log
 from sources import BaseLLMSource
 
 ############################
@@ -42,5 +43,5 @@ class LLMManager(object):
         if self.active_source is None:
             raise ValueError("Active source needs to be set before generating any response")
 
-        print(f"Generating response with the LLM source: {self.active_source.name}...")
+        print_log(f"Generating response with the LLM source: {self.active_source.name}...")
         return self.active_source.generate(prompt=prompt, bullet_text=bullet_text)

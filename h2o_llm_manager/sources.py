@@ -5,16 +5,9 @@ from typing import Any, List, Optional
 import openai
 import requests
 from gradio_client import Client
+from log import print_log
 from requests import Response
 from utils import LLMGenerateError, is_dict_string, split_sentences, string_to_dict
-
-# logs
-enable_logs: bool = False
-
-
-def print_log(message: str):
-    if enable_logs:
-        print(message)
 
 
 class LLMSourceType(str, Enum):
