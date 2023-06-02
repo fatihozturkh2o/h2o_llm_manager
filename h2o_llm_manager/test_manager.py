@@ -35,7 +35,7 @@ def test_sources():
     prompt = "Why 42?"
     llm_sources = get_llm_sources()
     llm_manager = LLMManager(sources=llm_sources)
-    llm_manager.set_active_source("h2oGPT")
+    llm_manager.set_active_source(llm_sources[0])
 
     print("Available LLM sources...")
     for i, source in enumerate(llm_manager.sources):

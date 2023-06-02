@@ -233,13 +233,12 @@ class MLOpsLLMSource(BaseLLMSource):
 
 class OpenAILLMSource(BaseLLMSource):
     def __init__(
-        self,
-        name: Optional[str] = None,
-        api_key: Optional[str] = None,
+        self, name: Optional[str] = None, api_key: Optional[str] = None, model: str = "gpt-4"
     ):
         self.type: LLMSourceType = LLMSourceType.OPENAI
         self.name: Optional[str] = name
         self.api_key: Optional[str] = api_key
+        self.model: str = model
 
     @property
     def failed_connection_message(self) -> str:
@@ -274,7 +273,7 @@ class OpenAILLMSource(BaseLLMSource):
 
         message = [{"role": "user", "content": prompt}]
         completion = openai.ChatCompletion.create(
-            model="gpt-4",
+            model=self.model,
             messages=message,
             temperature=temperature,
             max_tokens=max_tokens,

@@ -48,7 +48,7 @@ class LLMManager(object):
         if isinstance(value, BaseLLMSource):
             self.active_source = value
         else:  # str
-            self.active_source = self.get_source(source_type=value)
+            self.active_source = self.get_source(source_name=value)
 
     def generate(
         self,
