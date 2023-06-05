@@ -30,7 +30,7 @@ mlops_llm = MLOpsLLMSource(name="h2ogpt-gm-7b", url=url)
 response = mlops_llm.generate(prompt="Why 42?")
 print(f"{mlops_llm.name} response: {response}")
 
-# Output: h2ogpt-20b response: 42 is a number that has been used in many different contexts throughout history, including in literature, 
+# Output: h2ogpt-gm-7b response: 42 is a number that has been used in many different contexts throughout history, including in literature, 
 # mathematics, and popular culture. Here are a few reasons why 42 might be considered significant:
 # ...
 ```
@@ -44,8 +44,8 @@ import os
 from sources import OpenAILLMSource
 
 llm_openai_api_key = os.environ.get("OPENAI_API_KEY")
-openai_llm = OpenAILLMSource(name="GPT-4", api_key=llm_openai_api_key)
-response = openai_llm.generate(prompt=Why 42?")
+openai_llm = OpenAILLMSource(model="gpt-4", api_key=llm_openai_api_key)
+response = openai_llm.generate(prompt="Why 42?")
 print(f"{openai_llm.name} response: {response}")
 # Output: GPT-4 response: 42 is a number that has become famous due to its appearance in the science fiction series "The Hitchhiker's Guide to the
 # Galaxy" by Douglas Adams. In the story, a group of hyper-intelligent beings builds a supercomputer named Deep Thought to find the ultimate answer to
@@ -68,7 +68,7 @@ mlops_llm = MLOpsLLMSource(name="h2ogpt-gm-7b", url="https://model.cloud-qa.h2o.
 
 prompt = "Why 42?"
 llm_manager = LLMManager(sources=[h2ogpt_llm, mlops_llm])
-llm_manager.set_active_source("h2oGPT")
+llm_manager.set_active_source(h2ogpt_llm)
 
 for i, source in enumerate(llm_manager.sources):
     print(f"LLM Source {i}: {source.name}")
